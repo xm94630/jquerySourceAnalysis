@@ -1,0 +1,14 @@
+{
+  "name": "jquerySourceAnalysis",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts":{
+  	"start":"npm run lite",
+  	"lite": "lite-server"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "lite-server": "^2.2.2"
+  }
+}
