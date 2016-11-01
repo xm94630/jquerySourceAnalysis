@@ -1,16 +1,14 @@
+/*********************************************
+ * 第一章节
+ * 在这个章节中，我来研究的是jQuery的大的结构。
+ * 也就是jQuery构造函数
+ * 这里拆分成13个小的练习，层层深入。
+ * 最后一个实例，其实就是我的最后的结论，也是整个jQuery
+ * 体系中非常重要的一部分。
+ *********************************************/
+
 var l = function(){return console.log.apply(console,arguments);}
 
-/*(function(){
-
-	(21,94)  定义了一些变量和函数 jQuery = function(){}  (61行定义jQuery)
-	(96,283) 给JQ对象，添加一些对象和属性。
-	(8826)   window.jQuery = window.$ = jQuery;
-
-})();*/
-
-/***********************************
- * 实例
- ***********************************/
 var bee = (function(bee){
 
 	/*
@@ -200,7 +198,7 @@ var bee = (function(bee){
 	 * 实例11:构造函数 变态模式
 	 * 可不可以在是实例9的基础上再变态点呢
 	 * 恩..可以的
-	 * 我为 Fish.prototype.init 在添加一个prototype，呵呵呵
+	 * 我为 Fish.prototype.init 再添加一个prototype，呵呵呵
 	 */
 	bee.case11 = function(){
 		function Fish(){
@@ -223,52 +221,67 @@ var bee = (function(bee){
 		l(f.constructor === Object);
 	};
 
+	/*
+	 * 实例12:构造函数 变态模式
+	 * 这个模式有趣的,好好看两个：
+	 * 1.f这个实例中包含的属性有哪些，哪些来自于继承
+	 * 2.f.constructor指向的是谁？
+	 */
+	bee.case12 = function(){
+		function Fish(){
+			return  new Fish.prototype.init;
+		}
+		Fish.prototype = {
+			init:function xxx(){
+				this.width = 100;
+			}
+		};
+		//来来，我们修改下 Fish.prototype.init.prototype 的值吧
+		Fish.prototype.init.prototype = Fish.prototype;
+		var f = new Fish();
+		l(f);
+		l(f.constructor === Fish.prototype.init);
+		l(f.constructor === Object);
+	};
 
 
+	/*
+	 * 实例13:BOSS jQuery构造函数
+	 * jQuery中的基本架构模式就其实就是上面的实例12
+	 * 如何？通过一步一步地进行分析，再来看这个的时候，是不是就明了多了！
+	 */
+	bee.case13 = function(){
 
+		var jQuery = function(){
+			return new jQuery.prototype.init(1,2,3); 
+		};
 
+		jQuery.prototype = {
+			init:function(a,b,c){
 
+			},
+			getBoy:function(){
+
+			}
+		}
+
+		//这里主要来观察这个式子表示的意思：
+		//如果没有这个的话，实例内容仅仅包含init构造函数中的内容
+		//但是对init添加了jQuery.prototype之后，也继承了 jQuery.prototype的内容
+		//比如这里的getBoy方法和init方法本身
+		jQuery.prototype.init.prototype = jQuery.prototype;
+
+		
+		//按照原来的写法，这里就是使用new来实例的，不过呢，因为jQuery函数直接return的是一个对象
+		//所以，可以不使用new。我们在使用jquery的时候，其实也是不用  new $('xxx')  这样子的写法的！
+		//var j = new jQuery();
+		
+		var j = jQuery();
+		l(j);
+	};
 
 	return bee;
 })(bee||{});
 
-
-bee.case11();
-
-
-
-
-
-
-
-/*function Fish(){
-	return new Fish.prototype.init();
-}
-
-Fish.prototype = {
-	init:function(){
-		l('我是小鱼');
-	}
-}
-
-Fish.prototype.init.prototype = {width:100};
-
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//bee.case13();
 
