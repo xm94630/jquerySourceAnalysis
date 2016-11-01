@@ -175,10 +175,67 @@ var bee = (function(bee){
 	};
 
 
+	/*
+	 * 实例10:构造函数
+	 * 上面的让人混淆的是Fish构造函数在实例化的时候，内部是使用的自己原型对象上的一个方法。
+	 * 实际上这和使用别的构造函数上的原型上的方法是一样的，如下例子：
+	 * 其实举这个例子意义不是很大，只是顺手一写而已。
+	 */
+	bee.case10 = function(){
+		
+		function MyFun(){}
+		MyFun.prototype = {
+			Bird:function(){
+				this.width=100;
+			}
+		}
+		function Fish(){
+			return new MyFun.prototype.Bird;
+		}
+		var f = new Fish();
+		console.log(f);
+	};
+
+	/*
+	 * 实例11:构造函数 变态模式
+	 * 可不可以在是实例9的基础上再变态点呢
+	 * 恩..可以的
+	 * 我为 Fish.prototype.init 在添加一个prototype，呵呵呵
+	 */
+	bee.case11 = function(){
+		function Fish(){
+			return  new Fish.prototype.init;
+		}
+		Fish.prototype = {
+			init:function xxx(){
+				this.width = 100;
+			}
+		};
+		//这样子写的话，constructor 就不在是 init 啦
+		Fish.prototype.init.prototype = {
+			height:200
+		}
+		var f = new Fish();
+		l(f);
+		//构造函数不再是init了
+		l(f.constructor === Fish.prototype.init);
+		//构造函数是 Objsct了
+		l(f.constructor === Object);
+	};
+
+
+
+
+
 
 
 	return bee;
 })(bee||{});
+
+
+bee.case11();
+
+
 
 
 
