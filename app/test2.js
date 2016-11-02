@@ -62,14 +62,57 @@ var bee = (function(bee){
 	bee.caseB03 = function(){
 		
 		window.a == undefined;
-		typeof window.a = 'undefined';
+		typeof window.a == 'undefined';
+	};
+
+	/*
+	 * 实例5:$.type
+	 * 注意 class2type 的写法也学习，一般有“2”代表的是“to”，其实就是个映射表
+	 */
+	bee.caseB05 = function(){
+		
+		//var class2type = {};		//这是类型配对，最后会变成下面的形式
+		/*
+		class2type ={
+			'[object String]':'string',
+			...
+		}
+		 */
+		//其实最后就是用来做类型判断的啦，为$.type所用吧。
+		//这个在underscore中也有类似的实现。
+		l($.type([]));
+		l($.type({}));
+		l($.type(''));
+	};
+
+	/*
+	 * 实例5: 物尽其用
+	 * 这个思想非常的好，我减少了变量引用的次数
+	 */
+	bee.caseB06 = function(){
+
+		//这个是我游戏中用到的定义
+		var player = '巴巴雷恩';
+		var scene  = [0,1,0,1,1,1];
+		var menPai = {
+			'name':'兽王派',
+			'addr':'黑森林'
+		} 
+		//我这里就物尽其用，利用上面的代码直接做了核心方法的引用(第一次看见的时候，觉得怪怪的)
+		var core_concat   = scene.concat,
+			core_toString = menPai.toString,
+			core_trim     = player.trim;
+		//等效于
+		var core_concat   = [].concat,
+			core_toString = {}.toString,
+			core_trim     = ''.trim;
 	};
 
 
 	return bee;
 })(bee||{});
 
-bee.caseB03();
+bee.caseB06();
 
 
 
