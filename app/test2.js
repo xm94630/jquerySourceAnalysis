@@ -86,7 +86,7 @@ var bee = (function(bee){
 	};
 
 	/*
-	 * 实例5: 物尽其用
+	 * 实例6: 物尽其用
 	 * 这个思想非常的好，我减少了变量引用的次数
 	 */
 	bee.caseB06 = function(){
@@ -108,11 +108,30 @@ var bee = (function(bee){
 			core_trim     = ''.trim;
 	};
 
+	/*
+	 * 实例7: 正则
+	 */
+	bee.caseB07 = function(){
+		//这个用来匹配数字（什么正负数啊、科学计数法啥的都支持...）的正则表达式（的字符串形式）
+		//注意，后面的source，是正则表达式对象的一个属性。
+		var core_pnum = /[+-]?(?:\d*\.|)\d+(?:[eE][+-]?\d+|)/;
+
+		//(?:...)表示不捕获分组，不捕获分组和反向引用有关，这里暂不解释。
+		//xxx(xxxx)(?:xxxx)，你用这个正则表达式去匹配如果被匹配上可以得到()中被匹配文档的值
+		//l(core_pnum.exec('qw-234.1e-1a'));
+
+		l(/(a|)[1-9]+/.exec('11'));
+		l(/(red|blue|green)/.exec('green'));
+
+
+
+	};
+
 
 	return bee;
 })(bee||{});
 
-bee.caseB06();
+bee.caseB07();
 
 
 
