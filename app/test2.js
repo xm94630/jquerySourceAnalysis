@@ -122,16 +122,13 @@ var bee = (function(bee){
 
 		l(/(a|)[1-9]+/.exec('11'));
 		l(/(red|blue|green)/.exec('green'));
-
-
-
 	};
 
 
 	return bee;
 })(bee||{});
 
-bee.caseB07();
+//bee.caseB07();
 
 
 

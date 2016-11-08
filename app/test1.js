@@ -256,13 +256,17 @@ var bee = (function(bee){
 			return new jQuery.prototype.init(1,2,3); 
 		};
 
+		//这里这样子的写法值得注意的是，改变了jQuery原来的 constractor 的指向
+		//constractor 在jQuery创建之初，就默认绑定到了自己指向的按个函数了！（这个是js自己完成的行为）
 		jQuery.prototype = {
 			init:function(a,b,c){
 
 			},
 			getBoy:function(){
 
-			}
+			},
+			//这里是用来矫正 constractor 指向问题的！
+			constructor:jQuery
 		}
 
 		//这里主要来观察这个式子表示的意思：
@@ -278,10 +282,11 @@ var bee = (function(bee){
 		
 		var j = jQuery();
 		l(j);
+		l(j.constructor == jQuery);
 	};
 
 	return bee;
 })(bee||{});
 
-//bee.case13();
+bee.case13();
 
