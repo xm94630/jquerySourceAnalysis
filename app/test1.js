@@ -273,6 +273,7 @@ var bee = (function(bee){
 		//如果没有这个的话，实例内容仅仅包含init构造函数中的内容
 		//但是对init添加了jQuery.prototype之后，也继承了 jQuery.prototype的内容
 		//比如这里的getBoy方法和init方法本身
+		//这个还有一个重要的意义就是：如此一来，jQuery()产生的实例被instanceof判定为jQuery的实例
 		jQuery.prototype.init.prototype = jQuery.prototype;
 
 		
@@ -282,11 +283,132 @@ var bee = (function(bee){
 		
 		var j = jQuery();
 		l(j);
-		l(j.constructor == jQuery);
+		l(j.constructor == jQuery);  //true
+		l(j instanceof jQuery);      //true
+		l(j instanceof jQuery.prototype.init);  //true
 	};
+
+	/*
+	 * 实例14: instanceof 原理
+	 */
+	bee.case14 = function(){
+
+		//这个是最简单的例子
+		//那么instanceof是如何来判定是还是不是的呢，依据是什么？
+		function Fish(){this.a=123;}
+		var f = new Fish();
+		l(f);
+		l(f instanceof Fish);
+		
+		//我理解的判断依据（已经证实）是：实例的原型链上的任何一个原型对象等于Fish的prototype对象
+		//也就是说下面的情况只要满足其一就好了。
+		l(f.__proto__==Fish.prototype)
+		l(f.__proto__.__proto__==Fish.prototype)
+	}
+
+
+	/*
+	 * 实例15: instanceof 深入
+	 * 在实例化之前，改变 Fish.prototype 并不会影响 instanceof的操作结果
+	 */
+	bee.case15 = function(){
+
+		function Fish(){this.a=123;}
+		Fish.prototype = {};     //这里修改了原型对象
+		var f = new Fish();
+		l(f instanceof Fish);
+
+		l(f.__proto__==Fish.prototype) //但是这个还是没有发生改变（通常情况下，这个条件都是成立的）！所以依旧成立！
+		l(f.__proto__.__proto__==Fish.prototype)
+	}
+
+	/*
+	 * 实例16: 什么因素会对 instanceof 结果产生影响
+	 * 在实例化之后，改变 Fish.prototype 和 f.__proto__ 都会影响instanceof的结果
+	 */
+	bee.case16 = function(){
+
+		function Fish(){this.a=123;}
+		Fish.prototype = {};     
+		var f = new Fish();
+
+		l('实例化后，检测：');
+		l(f instanceof Fish);
+		l(f.__proto__==Fish.prototype) 
+		l(f.__proto__.__proto__==Fish.prototype)
+
+		//在实例化之后修改了原型对象
+		l('实例化后，修改了原型再检测：');
+		Fish.prototype = {xx:1};  //或者 f.__proto__= {xx:1};
+		l(f instanceof Fish);
+		l(f.__proto__==Fish.prototype) 
+		l(f.__proto__.__proto__==Fish.prototype)
+	}
+
+
+	/*
+	 * 实例17:BOSS instanceof 方法的手动实现 instance_of ！
+	 */
+	bee.case17 = function(){
+		function Fish(){this.a=123;}
+		var f = new Fish();
+		l(f instanceof Fish);
+
+		//这个是网上找的，比我刚才那种判断写法高明多了
+		//用递归完美处理，我当时咋就没有想到呢，这就是察觉啊！
+		function instance_of(L, R) {  //L表示左表达式，R表示右表达式
+		  var O = R.prototype;        //取R的显示原型
+		  L = L.__proto__;            //取L的隐式原型
+		  while (true) { 
+		    if (L === null) 
+		      return false; 
+		    if (O === L)              //这里重点：当O严格等于L时，返回true 
+		      return true; 
+		    L = L.__proto__; 
+		  } 
+		}
+
+		//instance_of和instanceof一样的结果！
+		l(instance_of(f,Fish));
+	}
+
+	/*
+	 * 实例18:instanceof 应用
+	 * 如何手动的操作，让原来不是看上去不是Fish的实例f，最后变成其真正的实例！
+	 * 回头再看看jQuery是如何做到的
+	 */
+	bee.case18 = function(){
+
+
+
+	}
+
+
+
 
 	return bee;
 })(bee||{});
 
-bee.case13();
+//bee.case17();
+
+
+
+
+/*function Fish(){
+	return new Fish.prototype.int();
+}
+Fish.prototype.int=function(){};
+Fish.prototype.int.prototype=Fish.prototype;
+
+var f = new Fish();
+l(f);
+l(f instanceof Fish)
+*/
+
+
+
+
+
+
+
 
