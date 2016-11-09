@@ -375,12 +375,54 @@ var bee = (function(bee){
 	/*
 	 * 实例18:instanceof 应用
 	 * 如何手动的操作，让原来不是看上去不是Fish的实例f，最后变成其真正的实例！
-	 * 回头再看看jQuery是如何做到的
 	 */
 	bee.case18 = function(){
 
+		var Bord = function(){
+			this.height = 100;
+		}
+		var Fish = function(){
+			return new Bord();
+		}
 
+		//这是核心内容，只要把Bord.prototype指向Fish.prototype就好了。
+		//这个时候Bord和Fish的prototype属性，都指向的是同一个对象。
+		//在instanceof判断中就是成立了的
+		//如果没这个语句的话，自然是不行的。
+		Bord.prototype = Fish.prototype;
 
+		var f = new Fish();
+		l(f)
+		l(f instanceof Fish);
+	}
+
+	/*
+	 * 实例19:instanceof 应用
+	 * 我们来加深下：
+	 * Bord不再是一个独立的构造函数了，而是寄托于Fish，成为Fish的原型上的一个方法
+	 */
+	bee.case19 = function(){
+
+		var Bord = function(){
+			this.height = 100;
+		}
+		var Fish = function(){
+			return new Bord();
+		}
+		Fish.prototype = {Bord}; //这种{Bord}写法也是我最近学习来的，马上实践下呢
+
+		//上面这句还可以添加更多方法
+		//Fish.prototype = {Bord,'run':function(){l('run!')}};
+
+		//核心语句
+		//这种结构看上去很诡异，第一次看的时候就容易晕菜啊
+		//经过我这样子的层层分析，就好理解
+		//这不就是jQuery所采用的办法
+		Fish.prototype.Bord.prototype = Fish.prototype;
+
+		var f = new Fish();
+		l(f)
+		l(f instanceof Fish);
 	}
 
 
@@ -389,22 +431,7 @@ var bee = (function(bee){
 	return bee;
 })(bee||{});
 
-//bee.case17();
-
-
-
-
-/*function Fish(){
-	return new Fish.prototype.int();
-}
-Fish.prototype.int=function(){};
-Fish.prototype.int.prototype=Fish.prototype;
-
-var f = new Fish();
-l(f);
-l(f instanceof Fish)
-*/
-
+//bee.case19();
 
 
 
