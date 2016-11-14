@@ -124,11 +124,43 @@ var bee = (function(bee){
 		l(/(red|blue|green)/.exec('green'));
 	};
 
+	/*
+	 * 实例8: jQuery.paarseHTML 
+	 */
+	bee.caseB08 = function(){
+
+		var htmlString = '<div>我是动态创建的</div><div>haha</div><script>alert("lala")</script>';
+		var arr  = jQuery.parseHTML(htmlString,document,true);
+		var arr2 = jQuery.parseHTML(htmlString,document,false); //这种结果下，会把script元素过滤掉
+		//返回的结果是一个数组，包含来dom对象呢
+		l(arr);
+		l(arr2);
+		$(function(){
+			$('body').append(arr[0]);
+		});
+	};
+
+	/*
+	 * 实例9: jQuery.merge 
+	 */
+	bee.caseB09 = function(){
+
+		var arr = [1,2,3];
+		var arr2 = [4,5];
+		l($.merge(arr,arr2)); //合并数组用的
+
+		var arr = {'0':'a',length:1}; //注意这里出现了对象，而且这个length是必须的
+		var arr2 = ['4','5'];
+		l($.merge(arr,arr2)); //还可以对对象合并操作
+	};
+
 
 	return bee;
 })(bee||{});
 
-//bee.caseB07();
+//bee.caseB09();
+
+
 
 
 
