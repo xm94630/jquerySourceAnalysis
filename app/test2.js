@@ -171,10 +171,116 @@ var bee = (function(bee){
 	};
 
 
+	/* 
+	 * 研究案例11: jquery中的一个思想
+	 * 这种模式（accept的实现）来自于jquery源码中，摘取局部：
+	 * if ( jQuery.isFunction( this[ match ] ) ) {
+	 *     this[ match ]( context[ match ] );
+	 * } else {
+	 *     this.attr( match, context[ match ] );
+	 * }
+	 *
+	 * 这种模式比较有趣，我就放在了这里。accept接受一个对象，如果对象的key正好就是
+	 * fish的方法，那么这个方法就会调用。
+	 */
+	bee.caseB11 = function(){
+		
+		var fish = {
+			accept:function(obj){
+
+				for(var k in obj){
+					if(fish.isFunction(this[k])){
+						this[k](obj[k]);
+					}else{
+						this[k] = obj[k];
+					}
+				}
+
+			},
+			isFunction:function(n){
+				if(Object.prototype.toString.apply(n)=='[object Function]') return true;
+			},
+			run:function(speed){
+				console.log('我的速度是：'+speed);
+				this.speed = speed;
+			}
+		}
+
+		fish.accept({
+			run:'30',
+			weight:'400'
+		});
+
+		l(fish);
+		/* 
+		 * 值得注意的是，accept就收的对象严格来说需要做处理的，
+		 * 在jquery中就是有一个 isPlainObject 的方法。
+		 */
+	}
+
+	/* 
+	 * 研究案例12: hasOwnProperty 深入研究
+	 * 这里给出几个例子来熟悉下！
+	 */
+	bee.caseB12 = function(){
+		
+		//最简单的开始
+		var jing = {width:100}
+		l(jing.hasOwnProperty('width'));     //true
+		l(jing.hasOwnProperty('toString'));  //flase
+
+		//继续
+		//对于myProto而言，toString就是自己的方法啦，再也没有从被人那里去继承
+		l('==>1');
+		var jing = {width:100}
+		var myProto = jing.__proto__;
+		l(myProto.hasOwnProperty('width'));     //flase
+		l(myProto.hasOwnProperty('toString'));  //true
+
+		//等效于上面的情况
+		l('==>2');
+		l(Object.prototype.hasOwnProperty('width'));
+		l(Object.prototype.hasOwnProperty('toString'));
+
+		//加大难度，引入call，不过还是等同于上面的情况
+		l('==>3');
+		l(Object.prototype.hasOwnProperty.call(Object.prototype,'toString'));  
+
+		//这个等同第一种：
+		l('==>4');
+		var jing = {width:100}
+		l(Object.prototype.hasOwnProperty.call(jing,'toString')); //false
+	}
+
+	/* 
+	 * 研究案例13: hasOwnProperty 深入研究
+	 * 我们来应用下
+	 */
+	bee.caseB13 = function(){
+		
+		//这个显然是false，因为$('body')对象是继承自某个对象的。
+		//而isPrototypeOf一直在最内层的原型对象上。所以还够不到，哈哈。
+		l(Object.prototype.hasOwnProperty.call($('body'),'isPrototypeOf'));
+
+		//这个呢，就可以了，读取了2层才触碰到最内层的那个呢！
+		l(Object.prototype.hasOwnProperty.call($.prototype.__proto__,'isPrototypeOf'));
+		//这个呢，和上面这个是等效的呢，写法上有点区别
+		l(Object.prototype.hasOwnProperty.call($('body').__proto__.__proto__,'isPrototypeOf'));
+	
+		/* 
+		 * jquery中就有 isPlainObject 的方法，内部是用这样子的方法来判断
+		 * 所谓的 PlainObject 对象，必须有且仅需一个层级，就可以触碰到那个对象最里层，包含‘isPrototypeOf’的对象。
+		 * 比如{a:123},就是。
+		 * 相当于直接是由Object构建的，或者是对象直接量。
+		 * 当然还有别的条件啦：比如dom对象就不是呢。
+		 */
+	}
+
+
 	return bee;
 })(bee||{});
 
-//bee.caseB10();
+//bee.caseB13();
 
 
 
