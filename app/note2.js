@@ -40,11 +40,14 @@ if(){
 	
 	//这个其实是进行了 /正则/.exec('参数') 的操作
 	//之前我已经研究过 exec 的用法，所以非常好理解结果
-	match = ['#div',null,'div1'] ; //$('#div')
-	match = ['<li>Hello','<li>','null'] ; //$('<li>Hello')
+	match = ['#div',undefined,'div1'] ; //$('#div')
+	match = ['<li>Hello','<li>',undefined,...] ; //$('<li>Hello')
 }
 
-if(){ //能进入的是创建标签的和id的 $('#div') $('<li>')
+//字符串
+if(){ 
+//能进入的是创建标签的和id的 $('#div') $('<li>')
+//另外还排除了一种情况就是：选中的是id,然后还传入contant上下文的情况，因为id本来就是最高级的。
 
 	//进一步判断 
 	if(){ 
@@ -60,6 +63,8 @@ if(){ //能进入的是创建标签的和id的 $('#div') $('<li>')
 		$('<li>',$(document))
 		它通过第二个参数是否为jQuery实例来判断的。用的 instanceof。
 		在 bee.case19 中有对 jquery实例判断有说明。
+
+		第二个参数对于创建元素来说也有2中作用，如果是上下文，就用作上下文，如果不是的话，就是属性的配置。
 
 		这里需要对 '<li>1</li><li>2</li>' 的参数做处理。
 		比如在：$('<li>1</li><li>2</li>').appendTo('ul');之中
