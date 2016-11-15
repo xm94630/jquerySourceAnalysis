@@ -45,10 +45,10 @@ var bee = (function(bee){
 	 * 3.相当于使用了别名，在意思的理解上也比较的直观
 	 */
 	bee.caseB03 = function(){
-		
 		var rootjQuery = jQuery(document);
 		console.log(rootjQuery);
-		console.log(rootjQuery.length);
+		console.log(typeof rootjQuery);
+		console.log(rootjQuery['0']==rootjQuery['context']);
 	};
 
 	/*
@@ -59,21 +59,21 @@ var bee = (function(bee){
 	 * bugs中也有对xmlNode.method的描述
 	 * jquery中用 core_strundefined 变量保存了 'undefined'字符串形式的值
 	 */
-	bee.caseB03 = function(){
+	bee.caseB04 = function(){
 		
-		window.a == undefined;
-		typeof window.a == 'undefined';
+		l(window.noThisValue == undefined);
+		l(typeof window.noThisValue == 'undefined');
 	};
 
 	/*
 	 * 实例5:$.type
-	 * 注意 class2type 的写法也学习，一般有“2”代表的是“to”，其实就是个映射表
+	 * 注意 class2type 的写法也值得学习，一般有“2”代表的是“to”，其实就是个映射表
 	 */
 	bee.caseB05 = function(){
 		
-		//var class2type = {};		//这是类型配对，最后会变成下面的形式
+		//这个对象中保存的是映射关系，一看就明白了的。
 		/*
-		class2type ={
+		var class2type ={
 			'[object String]':'string',
 			...
 		}
@@ -87,7 +87,7 @@ var bee = (function(bee){
 
 	/*
 	 * 实例6: 物尽其用
-	 * 这个思想非常的好，我减少了变量引用的次数
+	 * 这个思想非常的好，减少了变量引用的次数
 	 */
 	bee.caseB06 = function(){
 
@@ -125,14 +125,14 @@ var bee = (function(bee){
 	};
 
 	/*
-	 * 实例8: jQuery.paarseHTML 
+	 * 实例8: jQuery.parseHTML 
 	 */
 	bee.caseB08 = function(){
 
 		var htmlString = '<div>我是动态创建的</div><div>haha</div><script>alert("lala")</script>';
 		var arr  = jQuery.parseHTML(htmlString,document,true);
 		var arr2 = jQuery.parseHTML(htmlString,document,false); //这种结果下，会把script元素过滤掉
-		//返回的结果是一个数组，包含来dom对象呢
+		//返回的结果是jquey的实例。
 		l(arr);
 		l(arr2);
 		$(function(){
@@ -145,20 +145,36 @@ var bee = (function(bee){
 	 */
 	bee.caseB09 = function(){
 
+		//合并数组用的
 		var arr = [1,2,3];
 		var arr2 = [4,5];
-		l($.merge(arr,arr2)); //合并数组用的
+		l($.merge(arr,arr2)); 
 
-		var arr = {'0':'a',length:1}; //注意这里出现了对象，而且这个length是必须的
+		//还可以对对象合并操作
+		//这里arr为对象，length是必须的
+		//这样子arr2的添加是基于这个length的。
+		var arr = {'1':'a',length:1}; 
 		var arr2 = ['4','5'];
-		l($.merge(arr,arr2)); //还可以对对象合并操作
+		l($.merge(arr,arr2)); 
+	};
+
+
+	/*
+	 * 实例10: 正则
+	 */
+	bee.caseB10 = function(){
+
+		//来看看jquery中的这个正则
+		var rquickExpr = /^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]*))$/;
+		l(rquickExpr.exec( '<div>你好' ));
+
 	};
 
 
 	return bee;
 })(bee||{});
 
-//bee.caseB09();
+//bee.caseB10();
 
 
 
