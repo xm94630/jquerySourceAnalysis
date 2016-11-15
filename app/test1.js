@@ -424,8 +424,6 @@ var bee = (function(bee){
 		l(f)
 		l(f instanceof Fish);
 	}
-bee.case19();
-
 
 
 	return bee;
