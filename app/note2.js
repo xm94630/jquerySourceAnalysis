@@ -1,3 +1,5 @@
+//笔记2
+
 //实例属性和方法
 jQuery.fn = jQuery.prototype = {
 	jquery 版本
@@ -89,18 +91,40 @@ if(){
 		//{html:'xxx',title:'hi'}中的属性，如果是jquery的方法，就会被调用
 		//所以这里的“html”,就会调用，参数就是xxx
 
-
-
-
-
-
 	}else{ 
 		//$('#div') 
+		//这个最简单，直接利用 getElementById方法
 	}
 
-}else{
+//$('ul li.xx')
+}else if(){
 
+	//核心使用了find函数  
+	//上下文可以是原生dom,也可以是jquery对象
+	$(上下文).find('ul li.xx'); find -> sizzle
+
+	$('ul li.xx',上下文) 等效于下面的：
+	$(上下文).find('ul li.xx');
+
+	//这里的逻辑其实也是分成两部分:
+	//a)一个是没有上下文  比如：$('ul li.xx'),内部执行的是,
+	$(document).find('ul li.xx')
+	//b)一个是有上下文，是$对象,如 $('ul li.xx',某文)，内部执行的是：
+	某文.find('ul li.xx')
+
+//这里剩下的情况 (除了上面a,b情况) 就是：有上下文，不是$对象 
+}else{
+	$(某文).find('ul li.xx')
 }
+/* 
+ * 总结下最后的两个条件句，其实就是一种情况：$(上下文).find('ul li.xx')
+ */
+
+//到此为止，实例化传入字符串部分就结束了
+//复杂的有两个：一个是创建元素，利用了parseHTML 和 merge 
+//一个是复杂的选择，利用的地find
+
+//可见核心的逻辑被分散到各个函数中去啦~~
 
 
 

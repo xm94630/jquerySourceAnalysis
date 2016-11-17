@@ -276,6 +276,17 @@ var bee = (function(bee){
 		 */
 	}
 
+	/* 
+	 * 研究案例14: 选择效率对比 
+	 * 下面两种选择效率是一样的。其实在不就之前，我就问周这个问题，她她查找资料
+	 * 结论是一样的。
+	 */
+	bee.caseB14 = function(){
+		var a = $('ul li.xx',document);
+		var b = $(document).find('ul li.xx');
+		//为何说是一样的呢，因为源码168，就是把a用b的形式来处理。
+		//精准来说b会快一点点，因为a最后转变为b之前还执行了点点代码，呵呵。
+	}
 
 	return bee;
 })(bee||{});
