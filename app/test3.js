@@ -81,20 +81,33 @@ var bee = (function(bee){
 		})		
 	};
 
+	/*
+	 * 实例5: pushStack
+	 * 栈 
+	 * 这个方法在内部使用比较多，比如，实例方法slice、eq、map就是用的这个
+	 */
+	bee.caseC05 = function(){
+	
+		$(function(){
+			//这里得到的其实是span的实例对象，不过在该实例上多了一个属性prevObject，指向$('div')这个实例。
+			//注意这个prevObject是自己的实例方法，并不是在原型上的。pushStack给加的呢
+			var a = $('div').pushStack($('span'))
+			
+			a.css('color','red');
+			l(a);
+			a.prevObject.css('color','blue');
+
+			//也可以使用end来调转到栈下面的元素。和上面的是等效的。
+			//$('div').pushStack($('span')).css('color','red').end().css('color','yellow');	
+		})
+	};
+
 	
 
 	return bee;
 })(bee||{});
 
-bee.caseC04();
-
-
-
-
-
-
-
-
+//bee.caseC05();
 
 
 
