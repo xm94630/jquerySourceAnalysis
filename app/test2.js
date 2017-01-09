@@ -213,7 +213,7 @@ var bee = (function(bee){
 
 		l(fish);
 		/* 
-		 * 值得注意的是，accept就收的对象严格来说需要做处理的，
+		 * 值得注意的是，accept接收的对象严格来说需要做处理的，
 		 * 在jquery中就是有一个 isPlainObject 的方法。
 		 */
 	}
